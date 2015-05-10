@@ -8,5 +8,11 @@ export default Ember.Controller.extend({
         presence: true
       }
     }
+  }),
+
+  displayErrors: Ember.computed('data.validators.@each.isValid', function() {
+    return Ember.A(Ember.keys(this.get('data.errors')).map((key) => 
+      `${key}: ${this.get(`data.errors.${key}`).join(', ')}`
+    ))
   })
 });

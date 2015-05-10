@@ -1,4 +1,12 @@
 <form {{action 'submitForm' on='submit'}}>
-  {{input value=name}}
+  {{input value=data.name}}
   <button type="submit">Submit</button>
+  <h3>Errors</h3>
+  {{#if displayErrors}}
+    <ul>
+      {{#each displayErrors as |error|}}
+        {{error}}
+      {{/each}}
+    </ul>
+  {{/if}}
 </form>
