@@ -4,6 +4,13 @@ import BufferedProxy from 'ember-buffered-proxy/proxy';
 export default BufferedProxy.extend(EmberValidations.Mixin, Ember.Evented, {
   apiErrors: Ember.computed.oneWay('content.errors'),
 
+  init: function() {
+    this._super();
+    this.get('content').on('becameInvalid', 'didCommit', () => {
+      this.get('apiErrorBlacklist').clear();
+    })
+  },
+
   apiErrorBlacklist: Ember.computed(function() {
     return Ember.A();
   }),
