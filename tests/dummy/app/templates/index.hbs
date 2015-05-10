@@ -2,9 +2,9 @@
   {{input value=data.name}}
   <button type="submit">Submit</button>
   <h3>Errors</h3>
-  {{#if displayErrors}}
+  {{#if data.displayErrors}}
     <ul>
-      {{#each displayErrors as |error|}}
+      {{#each data.displayErrors as |error|}}
         {{error}}
       {{/each}}
     </ul>
