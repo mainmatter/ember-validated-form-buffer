@@ -1,8 +1,6 @@
-import Ember from 'ember';
-import validatedBuffer from './validated-buffer';
+import EmberValidations from 'ember-validations';
+import BufferedProxy from 'ember-buffered-proxy/proxy';
 
-export default function formObject(model, impl = {}) {
-  return Ember.computed(model, function() {
-    return validatedBuffer(this.get(model), impl);
-  });
-}
+export default BufferedProxy.extend(EmberValidations.Mixin, {
+  apiErrors: Ember.computed.oneWay('content.errors')
+});
