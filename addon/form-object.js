@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import EmberValidations from 'ember-validations';
 import BufferedProxy from 'ember-buffered-proxy/proxy';
 
@@ -8,7 +9,7 @@ export default BufferedProxy.extend(EmberValidations.Mixin, Ember.Evented, {
     this._super();
     this.get('content').on('becameInvalid', 'didCommit', () => {
       this.get('apiErrorBlacklist').clear();
-    })
+    });
   },
 
   apiErrorBlacklist: Ember.computed(function() {
@@ -29,12 +30,12 @@ export default BufferedProxy.extend(EmberValidations.Mixin, Ember.Evented, {
   displayErrors: Ember.computed('validators.@each.isValid', 'apiErrors.[]', 'apiErrorBlacklist.[]', function() {
     var displayErrors = Ember.A(Ember.keys(this.get('errors')).map((key) =>
       `${key}: ${this.get(`errors.${key}`).join(', ')}`
-    ))
+    ));
     this.get('apiErrors').forEach((apiError) => {
       if (!this.get('apiErrorBlacklist').contains(apiError.attribute)) {
         displayErrors.push(apiError.message);
       }
-    })
+    });
     return displayErrors;
   })
 });
