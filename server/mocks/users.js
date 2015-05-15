@@ -8,7 +8,7 @@ module.exports = function(app) {
   });
 
   usersRouter.put('/:id', function(req, res) {
-    var result = { errors: { name: ['too short'] } };
+    var result = { errors: { name: ['too short'], time: ['users can only be created at a certain time'] } };
     res.status(422).send(result);
   });
 
