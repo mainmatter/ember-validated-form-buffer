@@ -4,8 +4,8 @@ import BufferedProxy from 'ember-buffered-proxy/proxy';
 
 export default BufferedProxy.extend(EmberValidations.Mixin, Ember.Evented, {
   apiErrors: Ember.computed.oneWay('content.errors'),
-	changes: Ember.computed.alias('buffer'),
-	unsetApiErrors: Ember.K,
+  changes: Ember.computed.alias('buffer'),
+  unsetApiErrors: Ember.K,
 
   init: function() {
     this._super();
@@ -27,8 +27,8 @@ export default BufferedProxy.extend(EmberValidations.Mixin, Ember.Evented, {
     if (this.get(key) !== this.get(`content.${key}`)) {
       this.get('apiErrorBlacklist').pushObject(key);
     }
-		var unsetApiErrors = Ember.makeArray(this.unsetApiErrors.apply(this));
-		this.get('apiErrorBlacklist').pushObjects(unsetApiErrors);
+    var unsetApiErrors = Ember.makeArray(this.unsetApiErrors.apply(this));
+    this.get('apiErrorBlacklist').pushObjects(unsetApiErrors);
   }),
 
   displayErrors: Ember.computed('validators.@each.isValid', 'apiErrors.[]', 'apiErrorBlacklist.[]', function() {

@@ -18,10 +18,10 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-		"body-parser": "1.12.4",
+    "body-parser": "1.12.4",
     "broccoli-asset-rev": "^2.0.2",
-		"connect-restreamer": "1.0.2",
-		"ember-buffered-proxy": "^0.2.3",
+    "connect-restreamer": "1.0.2",
+    "ember-buffered-proxy": "^0.2.3",
     "ember-cli": "0.2.4",
     "ember-cli-app-version": "0.3.3",
     "ember-cli-content-security-policy": "0.4.0",
@@ -36,9 +36,9 @@
     "ember-export-application-global": "^1.0.2",
     "ember-disable-prototype-extensions": "^1.0.0",
     "ember-try": "0.0.4",
-		"ember-validations": "^2.0.0-alpha.3",
-		"express": "4.12.3",
-		"glob": "5.0.5"
+    "ember-validations": "^2.0.0-alpha.3",
+    "express": "4.12.3",
+    "glob": "5.0.5"
   },
   "keywords": [
     "ember-addon"

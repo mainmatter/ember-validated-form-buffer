@@ -8,11 +8,11 @@ export default Ember.Controller.extend({
         presence: true
       }
     },
-		unsetApiErrors: function() {
-			if (Ember.A(Ember.keys(this.get('changes'))).contains('name')) {
-				return 'time';
-			}
-		}
+    unsetApiErrors: function() {
+    	if (Ember.A(Ember.keys(this.get('changes'))).contains('name')) {
+    		return 'time';
+    	}
+    }
   }),
 
   actions: {
