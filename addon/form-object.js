@@ -35,12 +35,17 @@ export default BufferedProxy.extend(EmberValidations.Mixin, Ember.Evented, {
     var errorKeys = Ember.keys(this.get('errors')).filter((key) => {
       return Ember.isPresent(this.get(`errors.${key}`));
     });
-    var displayErrors = Ember.A(errorKeys.map((key) =>
-      `${key}: ${this.get(`errors.${key}`).join(', ')}`
-    ));
+    var displayErrors = Ember.Object.create();
+    errorKeys.forEach((key) => {
+      var errors = Ember.makeArray(this.get(`errors.${key}`));
+      displayErrors.set(key, errors);
+    });
     this.get('apiErrors').forEach((apiError) => {
       if (!this.get('apiErrorBlacklist').contains(apiError.attribute)) {
-        displayErrors.push(apiError.message);
+        if (Ember.isNone(displayErrors.get(apiError.attribute))) {
+          displayErrors.set(apiError.attribute, Ember.A());
+        }
+        displayErrors.get(apiError.attribute).push(apiError.message);
       }
     });
     return displayErrors;

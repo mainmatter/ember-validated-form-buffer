@@ -2,11 +2,14 @@
   {{input value=data.name}}
   <button type="submit">Submit</button>
   <h3>Errors</h3>
-  {{#if data.displayErrors}}
-    <ul>
-      {{#each data.displayErrors as |error|}}
-        <li>{{error}}</li>
-      {{/each}}
-    </ul>
-  {{/if}}
+  <ul>
+    {{#each-key object=data.displayErrors as |attribute errors|}}
+      <strong>{{attribute}}</strong>
+      <ul>
+        {{#each errors as |error|}}
+          <li>{{error}}</li>
+        {{/each}}
+      </ul>
+    {{/each-key}}
+  </ul>
 </form>
