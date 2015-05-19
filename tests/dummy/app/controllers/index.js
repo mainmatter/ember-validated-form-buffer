@@ -9,9 +9,9 @@ export default Ember.Controller.extend({
       }
     },
     unsetApiErrors: function() {
-    	if (Ember.A(Ember.keys(this.get('changes'))).contains('name')) {
-    		return 'time';
-    	}
+      if (Ember.A(Ember.keys(this.get('changes'))).contains('name')) {
+        return 'time';
+      }
     }
   }),
 

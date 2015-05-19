@@ -32,9 +32,9 @@ export default BufferedProxy.extend(EmberValidations.Mixin, Ember.Evented, {
   }),
 
   displayErrors: Ember.computed('validators.@each.isValid', 'apiErrors.[]', 'apiErrorBlacklist.[]', function() {
-		var errorKeys = Ember.keys(this.get('errors')).filter((key) => {
-			return Ember.isPresent(this.get(`errors.${key}`));
-		});
+    var errorKeys = Ember.keys(this.get('errors')).filter((key) => {
+      return Ember.isPresent(this.get(`errors.${key}`));
+    });
     var displayErrors = Ember.A(errorKeys.map((key) =>
       `${key}: ${this.get(`errors.${key}`).join(', ')}`
     ));
