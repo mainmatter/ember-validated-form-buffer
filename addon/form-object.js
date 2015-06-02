@@ -53,5 +53,9 @@ export default BufferedProxy.extend(EmberValidations.Mixin, Ember.Evented, {
       }
     });
     return displayErrors;
+  }),
+
+  hasDisplayErrors: Ember.computed('displayErrors', function() {
+    return !Ember.isEmpty(Ember.keys(this.get('displayErrors')));
   })
 });
