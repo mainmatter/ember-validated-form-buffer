@@ -12,7 +12,7 @@ export default BufferedProxy.extend(EmberValidations.Mixin, Ember.Evented, {
     var content = this.get('content');
     if (content instanceof DS.Model) {
       content.on('becameInvalid', 'didCommit', () => {
-        this.get('apiErrorBlacklist').clear();
+        this.clearApiErrorBlacklist();
       });
     }
   },
@@ -29,6 +29,10 @@ export default BufferedProxy.extend(EmberValidations.Mixin, Ember.Evented, {
   apiErrorBlacklist: Ember.computed(function() {
     return Ember.A();
   }),
+
+  clearApiErrorBlacklist: function() {
+    this.get('apiErrorBlacklist').clear();
+  },
 
   setUnknownProperty: function(key, value) {
     this._super(key, value);
