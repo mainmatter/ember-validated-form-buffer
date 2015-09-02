@@ -3,7 +3,7 @@ import DS from 'ember-data';
 import EmberValidations from 'ember-validations';
 import BufferedProxy from 'ember-buffered-proxy/proxy';
 
-export default BufferedProxy.extend(EmberValidations.Mixin, Ember.Evented, {
+export default BufferedProxy.extend(EmberValidations, Ember.Evented, {
   changes: Ember.computed.alias('buffer'),
   unsetApiErrors: Ember.K,
 
