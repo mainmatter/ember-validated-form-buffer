@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/simplabs/ember-form-objects.svg?branch=master)](https://travis-ci.org/simplabs/ember-form-objects)
+[![Build Status](https://travis-ci.org/simplabs/ember-form-object.svg?branch=master)](https://travis-ci.org/simplabs/ember-form-object)
 
-# Ember-form-objects
+# Ember-form-object
 
 This README outlines the details of collaborating on this Ember addon.
 

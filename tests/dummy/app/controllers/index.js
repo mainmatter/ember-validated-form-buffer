@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import formObject from 'ember-form-objects/form-object-cp';
+import formObject from 'ember-form-object/form-object-cp';
 
 export default Ember.Controller.extend({
   data: formObject('model', {
