@@ -38,7 +38,8 @@
     "ember-disable-prototype-extensions": "^1.0.0",
     "ember-try": "0.0.6",
     "express": "^4.8.5",
-    "glob": "^5.0.13"
+    "glob": "^5.0.13",
+    "morgan": "^1.5.2"
   },
   "keywords": [
     "ember-addon"

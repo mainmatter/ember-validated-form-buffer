@@ -4,17 +4,15 @@ module.exports = function(app) {
   var mocks      = globSync('./mocks/**/*.js', { cwd: __dirname }).map(require);
   var proxies    = globSync('./proxies/**/*.js', { cwd: __dirname }).map(require);
 
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({ type: 'application/*+json' }));
   app.use(bodyParser.urlencoded({
     extended: true
   }));
 
-  mocks.forEach(function(route) { route(app); });
+  // Log proxy requests
+  var morgan  = require('morgan');
+  app.use(morgan('dev'));
 
-  // proxy expects a stream, but express will have turned
-  // the request stream into an object because bodyParser
-  // has run. We have to convert it back to stream:
-  // https://github.com/nodejitsu/node-http-proxy/issues/180
-  app.use(require('connect-restreamer')());
+  mocks.forEach(function(route) { route(app); });
   proxies.forEach(function(route) { route(app); });
 };
