@@ -8,7 +8,7 @@ export default Ember.Controller.extend({
         presence: true
       }
     },
-    unsetApiErrors: function() {
+    unsetApiErrors() {
       if (Ember.A(Ember.keys(this.get('changes'))).contains('name')) {
         return 'time';
       }
@@ -16,7 +16,7 @@ export default Ember.Controller.extend({
   }),
 
   actions: {
-    submitForm: function() {
+    submitForm() {
       this.get('model').save();
     }
   }

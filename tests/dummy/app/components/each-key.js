@@ -1,12 +1,15 @@
 import Ember from 'ember';
 
+const { computed } = Ember;
+
 export default Ember.Component.extend({
-  items: Ember.computed('object', function() {
-    var object = this.get('object');
-    var keys   = Ember.keys(object);
+  items: computed('object', function() {
+    const object = this.get('object');
+    const keys   = Ember.keys(object);
 
     return Ember.A(keys.map(function(key) {
-      return { key: key, value: object[key]};
+      const value = object[key];
+      return { key, value };
     }));
   })
 });

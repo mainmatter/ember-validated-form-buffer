@@ -3,13 +3,15 @@ import DS from 'ember-data';
 import EmberValidations from 'ember-validations';
 import BufferedProxy from 'ember-buffered-proxy/proxy';
 
+const { computed, on } = Ember;
+
 export default BufferedProxy.extend(EmberValidations, Ember.Evented, {
-  changes: Ember.computed.alias('buffer'),
+  changes: computed.alias('buffer'),
   unsetApiErrors: Ember.K,
 
-  init: function() {
+  init() {
     this._super();
-    var content = this.get('content');
+    const content = this.get('content');
     if (content instanceof DS.Model) {
       content.on('becameInvalid', 'didCommit', () => {
         this.clearApiErrorBlacklist();
@@ -17,8 +19,8 @@ export default BufferedProxy.extend(EmberValidations, Ember.Evented, {
     }
   },
 
-  apiErrors: Ember.computed('content.errors', function() {
-    var content = this.get('content');
+  apiErrors: computed('content.errors', function() {
+    const content = this.get('content');
     if (content instanceof DS.Model) {
       return content.get('errors');
     } else {
@@ -26,34 +28,34 @@ export default BufferedProxy.extend(EmberValidations, Ember.Evented, {
     }
   }),
 
-  apiErrorBlacklist: Ember.computed(function() {
+  apiErrorBlacklist: computed(function() {
     return Ember.A();
   }),
 
-  clearApiErrorBlacklist: function() {
+  clearApiErrorBlacklist() {
     this.get('apiErrorBlacklist').clear();
   },
 
-  setUnknownProperty: function(key, value) {
+  setUnknownProperty(key, value) {
     this._super(key, value);
     this.trigger('didSetFormProperty', key, value);
   },
 
-  formPropertySet: Ember.on('didSetFormProperty', function(key) {
+  formPropertySet: on('didSetFormProperty', function(key) {
     if (this.get(key) !== this.get(`content.${key}`)) {
       this.get('apiErrorBlacklist').pushObject(key);
     }
-    var unsetApiErrors = Ember.makeArray(this.unsetApiErrors.apply(this));
+    const unsetApiErrors = Ember.makeArray(this.unsetApiErrors.apply(this));
     this.get('apiErrorBlacklist').pushObjects(unsetApiErrors);
   }),
 
-  displayErrors: Ember.computed('validators.@each.isValid', 'apiErrors.[]', 'apiErrorBlacklist.[]', function() {
-    var errorKeys = Ember.keys(this.get('errors')).filter((key) => {
+  displayErrors: computed('validators.@each.isValid', 'apiErrors.[]', 'apiErrorBlacklist.[]', function() {
+    const errorKeys = Ember.keys(this.get('errors')).filter((key) => {
       return Ember.isPresent(this.get(`errors.${key}`));
     });
-    var displayErrors = Ember.Object.create();
+    let displayErrors = Ember.Object.create();
     errorKeys.forEach((key) => {
-      var errors = Ember.makeArray(this.get(`errors.${key}`));
+      const errors = Ember.makeArray(this.get(`errors.${key}`));
       displayErrors.set(key, errors);
     });
     this.get('apiErrors').forEach((apiError) => {
@@ -67,7 +69,7 @@ export default BufferedProxy.extend(EmberValidations, Ember.Evented, {
     return displayErrors;
   }),
 
-  hasDisplayErrors: Ember.computed('displayErrors', function() {
+  hasDisplayErrors: computed('displayErrors', function() {
     return !Ember.isEmpty(Ember.keys(this.get('displayErrors')));
   })
 });
