@@ -3,7 +3,8 @@ import DS from 'ember-data';
 import EmberValidations from 'ember-validations';
 import BufferedProxy from 'ember-buffered-proxy/proxy';
 
-const { computed, on, isEmpty, isNone, isPresent, keys, makeArray } = Ember;
+const { computed, on, isEmpty, isNone, isPresent, makeArray } = Ember;
+const { keys } = Object;
 
 export default BufferedProxy.extend(EmberValidations, Ember.Evented, {
   changes: computed.alias('buffer'),
