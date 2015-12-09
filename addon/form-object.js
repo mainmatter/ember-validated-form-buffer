@@ -3,21 +3,19 @@ import DS from 'ember-data';
 import EmberValidations from 'ember-validations';
 import BufferedProxy from 'ember-buffered-proxy/proxy';
 
-const { computed, on } = Ember;
+const { computed, on, isEmpty, isNone, isPresent, keys, makeArray } = Ember;
 
 export default BufferedProxy.extend(EmberValidations, Ember.Evented, {
   changes: computed.alias('buffer'),
-  unsetApiErrors: Ember.K,
+  unsetApiErrors() {},
 
-  init() {
-    this._super();
+  _setupModelEvents: on('init', function() {
     const content = this.get('content');
     if (content instanceof DS.Model) {
-      content.on('becameInvalid', 'didCommit', () => {
-        this.clearApiErrorBlacklist();
-      });
+      content.on('didCommit', () => this.clearApiErrorBlacklist());
+      content.on('becameInvalid', () => this.clearApiErrorBlacklist());
     }
-  },
+  }),
 
   apiErrors: computed('content.errors', function() {
     const content = this.get('content');
@@ -45,22 +43,22 @@ export default BufferedProxy.extend(EmberValidations, Ember.Evented, {
     if (this.get(key) !== this.get(`content.${key}`)) {
       this.get('apiErrorBlacklist').pushObject(key);
     }
-    const unsetApiErrors = Ember.makeArray(this.unsetApiErrors.apply(this));
+    const unsetApiErrors = makeArray(this.unsetApiErrors.apply(this));
     this.get('apiErrorBlacklist').pushObjects(unsetApiErrors);
   }),
 
   displayErrors: computed('validators.@each.isValid', 'apiErrors.[]', 'apiErrorBlacklist.[]', function() {
-    const errorKeys = Ember.keys(this.get('errors')).filter((key) => {
-      return Ember.isPresent(this.get(`errors.${key}`));
+    const errorKeys = keys(this.get('errors')).filter((key) => {
+      return isPresent(this.get(`errors.${key}`));
     });
     let displayErrors = Ember.Object.create();
     errorKeys.forEach((key) => {
-      const errors = Ember.makeArray(this.get(`errors.${key}`));
+      const errors = makeArray(this.get(`errors.${key}`));
       displayErrors.set(key, errors);
     });
     this.get('apiErrors').forEach((apiError) => {
       if (!this.get('apiErrorBlacklist').contains(apiError.attribute)) {
-        if (Ember.isNone(displayErrors.get(apiError.attribute))) {
+        if (isNone(displayErrors.get(apiError.attribute))) {
           displayErrors.set(apiError.attribute, Ember.A());
         }
         displayErrors.get(apiError.attribute).push(apiError.message);
@@ -70,6 +68,6 @@ export default BufferedProxy.extend(EmberValidations, Ember.Evented, {
   }),
 
   hasDisplayErrors: computed('displayErrors', function() {
-    return !Ember.isEmpty(Ember.keys(this.get('displayErrors')));
+    return !isEmpty(keys(this.get('displayErrors')));
   })
 });

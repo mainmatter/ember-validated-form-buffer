@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import formObject from 'ember-form-object/form-object-cp';
 
+const { keys } = Ember;
+
 export default Ember.Controller.extend({
   data: formObject('model', {
     validations: {
@@ -9,7 +11,7 @@ export default Ember.Controller.extend({
       }
     },
     unsetApiErrors() {
-      if (Ember.A(Ember.keys(this.get('changes'))).contains('name')) {
+      if (Ember.A(keys(this.get('changes'))).contains('name')) {
         return 'time';
       }
     }
