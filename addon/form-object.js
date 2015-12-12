@@ -1,12 +1,11 @@
 import Ember from 'ember';
 import DS from 'ember-data';
-import EmberValidations from 'ember-validations';
 import BufferedProxy from 'ember-buffered-proxy/proxy';
 
-const { computed, on, isEmpty, isNone, isPresent, makeArray } = Ember;
+const { computed, on, isEmpty, isNone, makeArray } = Ember;
 const { keys } = Object;
 
-export default BufferedProxy.extend(EmberValidations, Ember.Evented, {
+export default BufferedProxy.extend(Ember.Evented, {
   changes: computed.alias('buffer'),
   unsetApiErrors() {},
 
@@ -48,13 +47,11 @@ export default BufferedProxy.extend(EmberValidations, Ember.Evented, {
     this.get('apiErrorBlacklist').pushObjects(unsetApiErrors);
   }),
 
-  displayErrors: computed('validators.@each.isValid', 'apiErrors.[]', 'apiErrorBlacklist.[]', function() {
-    const errorKeys = keys(this.get('errors')).filter((key) => {
-      return isPresent(this.get(`errors.${key}`));
-    });
+  displayErrors: computed('validations.errors.[]', 'apiErrors.[]', 'apiErrorBlacklist.[]', function() {
+    const errorAttributes = Ember.A(this.get('validations.errors')).mapBy('attribute');
     let displayErrors = Ember.Object.create();
-    errorKeys.forEach((key) => {
-      const errors = makeArray(this.get(`errors.${key}`));
+    errorAttributes.forEach((key) => {
+      const errors = Ember.A(makeArray(this.get(`validations.attrs.${key}.errors`))).mapBy('message');
       displayErrors.set(key, errors);
     });
     this.get('apiErrors').forEach((apiError) => {

@@ -14,7 +14,10 @@ describe('FormObject', () => {
     content = Ember.Object.extend(Ember.Evented, {
       init() {
         this._super();
-        this.set('errors', Ember.Object.create());
+        this.set('validations', Ember.Object.create({
+          errors: Ember.A(),
+          attrs:  Ember.Object.create()
+        }));
       }
     }).create();
     formObject = FormObject.create({ content });
@@ -32,25 +35,22 @@ describe('FormObject', () => {
     });
 
     it("contains the object's own errors", () => {
-      formObject.get('errors').set('attr', ['invalid']);
-
-      expect(formObject.get('displayErrors.attr')).to.have.members(['invalid']);
-    });
-
-    it('contains the errors as arrays for every property', () => {
-      formObject.get('errors').set('attr', 'invalid');
+      formObject.set('validations.attrs.attr', Ember.Object.create({ errors: [{ message: 'invalid' }] }));
+      formObject.get('validations.errors').pushObject(Ember.Object.create({ attribute: 'attr' }));
 
       expect(formObject.get('displayErrors.attr')).to.have.members(['invalid']);
     });
 
     it('does not contain attributes with empty error lists', () => {
-      formObject.get('errors').set('attr2', []);
+      formObject.set('validations.attrs.attr', Ember.Object.create({ errors: [] }));
+      formObject.get('validations.errors').pushObject(Ember.Object.create({ attribute: 'attr' }));
 
       expect(formObject.get('displayErrors.attr2')).to.be.undefined;
     });
 
     it('merges API errors with the errors', () => {
-      formObject.get('errors').set('attr', 'invalid');
+      formObject.set('validations.attrs.attr', Ember.Object.create({ errors: [{ message: 'invalid' }] }));
+      formObject.get('validations.errors').pushObject(Ember.Object.create({ attribute: 'attr' }));
       formObject.set('apiErrors', [
         { attribute: 'attr', message: 'malformed' },
         { attribute: 'attr2', message: 'missing' }
@@ -61,7 +61,8 @@ describe('FormObject', () => {
     });
 
     it('does not merge blacklisted API errors', () => {
-      formObject.get('errors').set('attr', 'invalid');
+      formObject.set('validations.attrs.attr', Ember.Object.create({ errors: [{ message: 'invalid' }] }));
+      formObject.get('validations.errors').pushObject(Ember.Object.create({ attribute: 'attr' }));
       formObject.set('apiErrors', [
         { attribute: 'attr', message: 'malformed' },
         { attribute: 'attr2', message: 'missing' }
