@@ -1,11 +1,11 @@
 import Ember from 'ember';
 import FormObject from './form-object';
 
-export default function formObject(modelProperty, Validations = {}, impl = {}) {
+export default function formObject(modelProperty, ...mixins) {
   return Ember.computed(modelProperty, function() {
     const container = this.get('container');
     const model = this.get(modelProperty);
-    return FormObject.extend(Validations, impl, {
+    return FormObject.extend(...mixins, {
       container: null
     }).create({
       container,

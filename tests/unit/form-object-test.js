@@ -23,34 +23,23 @@ describe('FormObject', () => {
     formObject = FormObject.create({ content });
   });
 
-  describe('apiErrorBlacklist', () => {
-    it('is empty by default', () => {
-      expect(formObject.get('apiErrorBlacklist')).to.be.empty;
-    });
-  });
-
   describe('displayErrors', () => {
     it('is empty by default', () => {
       expect(formObject.get('displayErrors')).to.be.empty;
     });
 
-    it("contains the object's own errors", () => {
-      formObject.set('validations.attrs.attr', Ember.Object.create({ errors: [{ message: 'invalid' }] }));
-      formObject.get('validations.errors').pushObject(Ember.Object.create({ attribute: 'attr' }));
+    it('contains the client errors', () => {
+      formObject.set('clientErrors', Ember.Object.create({
+        attr: ['invalid']
+      }));
 
       expect(formObject.get('displayErrors.attr')).to.have.members(['invalid']);
     });
 
-    it('does not contain attributes with empty error lists', () => {
-      formObject.set('validations.attrs.attr', Ember.Object.create({ errors: [] }));
-      formObject.get('validations.errors').pushObject(Ember.Object.create({ attribute: 'attr' }));
-
-      expect(formObject.get('displayErrors.attr2')).to.be.undefined;
-    });
-
-    it('merges API errors with the errors', () => {
-      formObject.set('validations.attrs.attr', Ember.Object.create({ errors: [{ message: 'invalid' }] }));
-      formObject.get('validations.errors').pushObject(Ember.Object.create({ attribute: 'attr' }));
+    it('merges API errors with the client errors', () => {
+      formObject.set('clientErrors', Ember.Object.create({
+        attr: ['invalid']
+      }));
       formObject.set('apiErrors', [
         { attribute: 'attr', message: 'malformed' },
         { attribute: 'attr2', message: 'missing' }
@@ -61,13 +50,14 @@ describe('FormObject', () => {
     });
 
     it('does not merge blacklisted API errors', () => {
-      formObject.set('validations.attrs.attr', Ember.Object.create({ errors: [{ message: 'invalid' }] }));
-      formObject.get('validations.errors').pushObject(Ember.Object.create({ attribute: 'attr' }));
+      formObject.set('clientErrors', Ember.Object.create({
+        attr: ['invalid']
+      }));
       formObject.set('apiErrors', [
         { attribute: 'attr', message: 'malformed' },
         { attribute: 'attr2', message: 'missing' }
       ]);
-      formObject.get('apiErrorBlacklist').pushObjects(['attr', 'attr2']);
+      formObject.get('_apiErrorBlacklist').pushObjects(['attr', 'attr2']);
 
       expect(formObject.get('displayErrors.attr')).to.have.members(['invalid']);
       expect(formObject.get('displayErrors.attr2')).to.be.undefined;
@@ -90,7 +80,7 @@ describe('FormObject', () => {
     });
   });
 
-  describe('apiError', () => {
+  describe('apiErrors', () => {
     describe('when the content is a DS.Model', () => {
       beforeEach(() => {
         content = DS.Model.extend({
@@ -113,12 +103,19 @@ describe('FormObject', () => {
     });
   });
 
-  describe('clearApiErrorBlacklist', () => {
-    it('clears the apiErrorBlacklist', () => {
-      formObject.get('apiErrorBlacklist').push('attr');
-      formObject.clearApiErrorBlacklist();
+  describe('clientErrors', () => {
+    it("returns the object's validation errors", () => {
+      formObject.set('validations.attrs.attr', Ember.Object.create({ errors: [{ message: 'invalid' }] }));
+      formObject.get('validations.errors').pushObject(Ember.Object.create({ attribute: 'attr' }));
 
-      expect(formObject.get('apiErrorBlacklist')).to.be.empty;
+      expect(formObject.get('clientErrors.attr')).to.have.members(['invalid']);
+    });
+
+    it('does not contain attributes with empty error lists', () => {
+      formObject.set('validations.attrs.attr', Ember.Object.create({ errors: [] }));
+      formObject.get('validations.errors').pushObject(Ember.Object.create({ attribute: 'attr' }));
+
+      expect(formObject.get('clientErrors.attr')).to.be.undefined;
     });
   });
 
@@ -128,7 +125,7 @@ describe('FormObject', () => {
         content.set('attr', 'test');
         formObject.set('attr', 'test');
 
-        expect(formObject.get('apiErrorBlacklist')).to.be.empty;
+        expect(formObject.get('_apiErrorBlacklist')).to.be.empty;
       });
     });
 
@@ -136,7 +133,7 @@ describe('FormObject', () => {
       it('adds the property to the apiErrorBlacklist', () => {
         formObject.set('attr', 'test');
 
-        expect(formObject.get('apiErrorBlacklist')).to.have.members(['attr']);
+        expect(formObject.get('_apiErrorBlacklist')).to.have.members(['attr']);
       });
     });
 
@@ -150,7 +147,7 @@ describe('FormObject', () => {
             formObject.set('attr', 'test');
             const expected = Ember.A(['attr']).pushObjects(Ember.makeArray(returnValue));
 
-            expect(formObject.get('apiErrorBlacklist')).to.have.members(expected);
+            expect(formObject.get('_apiErrorBlacklist')).to.have.members(expected);
           });
         });
       });
@@ -163,7 +160,7 @@ describe('FormObject', () => {
             };
             formObject.set('attr', 'test');
 
-            expect(formObject.get('apiErrorBlacklist')).to.have.members(['attr']);
+            expect(formObject.get('_apiErrorBlacklist')).to.have.members(['attr']);
           });
         });
       });
@@ -178,14 +175,14 @@ describe('FormObject', () => {
 
     describe('when the content triggers the "becameInvalid" event', () => {
       beforeEach(() => {
-        formObject.get('apiErrorBlacklist').pushObject('test');
+        formObject.get('_apiErrorBlacklist').pushObject('test');
       });
 
       it('clears the API errors blacklist', (done) => {
         content.trigger('becameInvalid');
 
         Ember.run.next(() => {
-          expect(formObject.get('apiErrorBlacklist')).to.be.empty;
+          expect(formObject.get('_apiErrorBlacklist')).to.be.empty;
           done();
         });
       });
@@ -193,14 +190,14 @@ describe('FormObject', () => {
 
     describe('when the content triggers the "didCommit" event', () => {
       beforeEach(() => {
-        formObject.get('apiErrorBlacklist').pushObject('test');
+        formObject.get('_apiErrorBlacklist').pushObject('test');
       });
 
       it('clears the API errors blacklist', (done) => {
         content.trigger('didCommit');
 
         Ember.run.next(() => {
-          expect(formObject.get('apiErrorBlacklist')).to.be.empty;
+          expect(formObject.get('_apiErrorBlacklist')).to.be.empty;
           done();
         });
       });
