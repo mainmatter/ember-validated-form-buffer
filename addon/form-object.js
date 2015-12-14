@@ -2,7 +2,7 @@ import Ember from 'ember';
 import DS from 'ember-data';
 import BufferedProxy from 'ember-buffered-proxy/proxy';
 
-const { computed, on, isEmpty, isNone, makeArray } = Ember;
+const { computed, on, isEmpty, isNone, makeArray, isPresent } = Ember;
 const { keys } = Object;
 
 export default BufferedProxy.extend(Ember.Evented, {
@@ -12,8 +12,8 @@ export default BufferedProxy.extend(Ember.Evented, {
   _setupModelEvents: on('init', function() {
     const content = this.get('content');
     if (content instanceof DS.Model) {
-      content.on('didCommit', () => this.clearApiErrorBlacklist());
-      content.on('becameInvalid', () => this.clearApiErrorBlacklist());
+      content.on('didCommit', () => this._clearApiErrorBlacklist());
+      content.on('becameInvalid', () => this._clearApiErrorBlacklist());
     }
   }),
 
@@ -26,36 +26,31 @@ export default BufferedProxy.extend(Ember.Evented, {
     }
   }),
 
-  apiErrorBlacklist: computed(function() {
-    return Ember.A();
-  }),
-
-  clearApiErrorBlacklist() {
-    this.get('apiErrorBlacklist').clear();
-  },
-
-  setUnknownProperty(key, value) {
-    this._super(key, value);
-    this.trigger('didSetFormProperty', key, value);
-  },
-
-  formPropertySet: on('didSetFormProperty', function(key) {
-    if (this.get(key) !== this.get(`content.${key}`)) {
-      this.get('apiErrorBlacklist').pushObject(key);
-    }
-    const unsetApiErrors = makeArray(this.unsetApiErrors.apply(this));
-    this.get('apiErrorBlacklist').pushObjects(unsetApiErrors);
-  }),
-
-  displayErrors: computed('validations.errors.[]', 'apiErrors.[]', 'apiErrorBlacklist.[]', function() {
-    const errorAttributes = Ember.A(this.get('validations.errors')).mapBy('attribute');
-    let displayErrors = Ember.Object.create();
+  clientErrors: computed('validations.errors.[]', function() {
+    const validationErrors = this.get('validations.errors');
+    const errorAttributes = Ember.A(validationErrors).mapBy('attribute');
+    let clientErrors = Ember.Object.create();
     errorAttributes.forEach((key) => {
-      const errors = Ember.A(makeArray(this.get(`validations.attrs.${key}.errors`))).mapBy('message');
-      displayErrors.set(key, errors);
+      const errors = makeArray(this.get(`validations.attrs.${key}.errors`));
+      const messages = Ember.A(errors).mapBy('message');
+      if (isPresent(messages)) {
+        clientErrors.set(key, messages);
+      }
     });
-    this.get('apiErrors').forEach((apiError) => {
-      if (!this.get('apiErrorBlacklist').contains(apiError.attribute)) {
+    return clientErrors;
+  }),
+
+  displayErrors: computed('clientErrors.[]', 'apiErrors.[]', '_apiErrorBlacklist.[]', function() {
+    const { apiErrors, _apiErrorBlacklist: apiErrorBlacklist, clientErrors } = this.getProperties(
+      'apiErrors', '_apiErrorBlacklist', 'clientErrors'
+    );
+    const displayErrors = Ember.Object.create();
+    keys(clientErrors).forEach((key) => {
+      const value = clientErrors.get(key);
+      displayErrors.set(key, value);
+    });
+    apiErrors.forEach((apiError) => {
+      if (!apiErrorBlacklist.contains(apiError.attribute)) {
         if (isNone(displayErrors.get(apiError.attribute))) {
           displayErrors.set(apiError.attribute, Ember.A());
         }
@@ -67,5 +62,26 @@ export default BufferedProxy.extend(Ember.Evented, {
 
   hasDisplayErrors: computed('displayErrors', function() {
     return !isEmpty(keys(this.get('displayErrors')));
+  }),
+
+  setUnknownProperty(key, value) {
+    this._super(key, value);
+    this.trigger('didSetFormProperty', key, value);
+  },
+
+  _apiErrorBlacklist: computed(function() {
+    return Ember.A();
+  }),
+
+  _clearApiErrorBlacklist() {
+    this.get('_apiErrorBlacklist').clear();
+  },
+
+  _formPropertySet: on('didSetFormProperty', function(key) {
+    if (this.get(key) !== this.get(`content.${key}`)) {
+      this.get('_apiErrorBlacklist').pushObject(key);
+    }
+    const unsetApiErrors = makeArray(this.unsetApiErrors.apply(this));
+    this.get('_apiErrorBlacklist').pushObjects(unsetApiErrors);
   })
 });
