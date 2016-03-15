@@ -145,7 +145,7 @@ describe('FormObject', () => {
               return returnValue;
             };
             formObject.set('attr', 'test');
-            const expected = Ember.A(['attr']).pushObjects(Ember.makeArray(returnValue));
+            let expected = Ember.A(['attr']).pushObjects(Ember.makeArray(returnValue));
 
             expect(formObject.get('_apiErrorBlacklist')).to.have.members(expected);
           });
