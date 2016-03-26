@@ -1,15 +1,26 @@
 import Ember from 'ember';
+import getOwner from 'ember-getowner-polyfill';
 import FormObject from './form-object';
+
+const { keys } = Object;
+
+function creatFormObject(model, owner, ...mixins) {
+  const ownerInjection = owner.ownerInjection();
+  const ownerProperties = keys(ownerInjection).reduce((acc, key) => {
+    acc[key] = null;
+    return acc
+  }, {});
+
+  return FormObject.extend(...mixins, ownerProperties).create(ownerInjection, {
+    content: model
+  });
+}
 
 export default function formObject(modelProperty, ...mixins) {
   return Ember.computed(modelProperty, function() {
-    const container = this.get('container');
     const model = this.get(modelProperty);
-    return FormObject.extend(...mixins, {
-      container: null
-    }).create({
-      container,
-      content: model
-    });
+    const owner = getOwner(this);
+
+    return creatFormObject(model, owner, ...mixins);
   });
 }
