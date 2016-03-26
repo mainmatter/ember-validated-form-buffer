@@ -2,20 +2,21 @@ import Ember from 'ember';
 import DS from 'ember-data';
 import BufferedProxy from 'ember-buffered-proxy/proxy';
 
-const { computed, on, isEmpty, isNone, makeArray, isPresent } = Ember;
+const { computed, isEmpty, isNone, makeArray, isPresent } = Ember;
 const { keys } = Object;
 
 export default BufferedProxy.extend(Ember.Evented, {
-  changes: computed.alias('buffer'),
   unsetApiErrors() {},
 
-  _setupModelEvents: on('init', function() {
+  init() {
+    this._super(...arguments);
+
     const content = this.get('content');
     if (content instanceof DS.Model) {
       content.on('didCommit', () => this._clearApiErrorBlacklist());
       content.on('becameInvalid', () => this._clearApiErrorBlacklist());
     }
-  }),
+  },
 
   apiErrors: computed('content.errors', function() {
     const content = this.get('content');
@@ -64,9 +65,14 @@ export default BufferedProxy.extend(Ember.Evented, {
     return !isEmpty(keys(this.get('displayErrors')));
   }),
 
-  setUnknownProperty(key, value) {
-    this._super(key, value);
-    this.trigger('didSetFormProperty', key, value);
+  setUnknownProperty(key) {
+    this._super(...arguments);
+
+    if (this.get(key) !== this.get(`content.${key}`)) {
+      this.get('_apiErrorBlacklist').pushObject(key);
+    }
+    const unsetApiErrors = makeArray(this.unsetApiErrors.apply(this));
+    this.get('_apiErrorBlacklist').pushObjects(unsetApiErrors);
   },
 
   _apiErrorBlacklist: computed(function() {
@@ -75,13 +81,5 @@ export default BufferedProxy.extend(Ember.Evented, {
 
   _clearApiErrorBlacklist() {
     this.get('_apiErrorBlacklist').clear();
-  },
-
-  _formPropertySet: on('didSetFormProperty', function(key) {
-    if (this.get(key) !== this.get(`content.${key}`)) {
-      this.get('_apiErrorBlacklist').pushObject(key);
-    }
-    const unsetApiErrors = makeArray(this.unsetApiErrors.apply(this));
-    this.get('_apiErrorBlacklist').pushObjects(unsetApiErrors);
-  })
+  }
 });
