@@ -11,15 +11,22 @@ const Validations = buildValidations({
 export default Ember.Controller.extend({
   data: formBufferProperty('model', Validations, {
     unsetApiErrors() {
-      if (Ember.A(keys(this.get('changes'))).contains('name')) {
+      if (Ember.A(keys(this.get('buffer'))).contains('name')) {
         return 'time';
       }
     }
   }),
 
   actions: {
-    submitForm() {
+    submit(e) {
+      e.preventDefault();
+
+      this.get('data').applyBufferedChanges();
       this.get('model').save();
+    },
+
+    reset() {
+      this.get('data').discardBufferedChanges();
     }
   }
 });
