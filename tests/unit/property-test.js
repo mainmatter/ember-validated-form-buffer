@@ -3,9 +3,9 @@ import Ember from 'ember';
 import { it } from 'ember-mocha';
 import { describe, beforeEach } from 'mocha';
 import { expect } from 'chai';
-import formObject from 'ember-form-object/form-object-property';
+import property from 'ember-validated-form-buffer/property';
 
-describe('formObject', () => {
+describe('property', () => {
   let TestClass;
   let testInstance;
   let model;
@@ -15,14 +15,14 @@ describe('formObject', () => {
     container = Ember.Object.create();
     model = Ember.Object.create();
     TestClass = Ember.Object.extend({
-      data: formObject('model')
+      data: property('model')
     });
     testInstance = TestClass.create({ model, container });
   });
 
   it('defines a computed property', () => {
     TestClass = Ember.Object.extend({
-      data: formObject('model')
+      data: property('model')
     });
 
     TestClass.eachComputedProperty((property) => {
@@ -40,7 +40,7 @@ describe('formObject', () => {
 
   it('mixes in all specified mixins', () => {
     TestClass = Ember.Object.extend({
-      data: formObject('model', {
+      data: property('model', {
         methodA() {}
       }, {
         methodB() {}

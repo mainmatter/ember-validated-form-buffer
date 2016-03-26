@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/simplabs/ember-form-object.svg?branch=master)](https://travis-ci.org/simplabs/ember-form-object)
+[![Build Status](https://travis-ci.org/simplabs/ember-validated-form-buffer.svg?branch=master)](https://travis-ci.org/simplabs/ember-validated-form-buffer)
 
-# Ember-form-object
+# ember-validated-form-buffer
 
 This README outlines the details of collaborating on this Ember addon.
 

@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { validator, buildValidations } from 'ember-cp-validations';
-import formObject from 'ember-form-object';
+import formBufferProperty from 'ember-validated-form-buffer';
 
 const { keys } = Object;
 
@@ -9,7 +9,7 @@ const Validations = buildValidations({
 });
 
 export default Ember.Controller.extend({
-  data: formObject('model', Validations, {
+  data: formBufferProperty('model', Validations, {
     unsetApiErrors() {
       if (Ember.A(keys(this.get('changes'))).contains('name')) {
         return 'time';

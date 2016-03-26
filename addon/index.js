@@ -1,3 +1,3 @@
-import formObjectProperty from './form-object-property';
+import property from './property';
 
-export default formObjectProperty;
+export default property;
