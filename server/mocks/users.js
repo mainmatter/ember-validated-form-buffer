@@ -10,8 +10,7 @@ module.exports = function(app) {
   usersRouter.patch('/:id', function(req, res) {
     var result = {
       errors: [
-        { source: { pointer: '/data/attributes/name' }, title: 'too short' },
-        { source: { pointer: '/data/attributes/time' }, title: 'users can only be created at a certain time' }
+        { source: { pointer: '/data/attributes/name' }, title: 'too short' }
       ]
     };
     res.status(422).send(result);
