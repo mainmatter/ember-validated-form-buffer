@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { validator, buildValidations } from 'ember-cp-validations';
-import formObject from 'ember-form-object';
+import formObject from 'ember-form-objects';
 
 const { keys } = Object;
 

@@ -3,7 +3,7 @@ import Ember from 'ember';
 import { it } from 'ember-mocha';
 import { describe, beforeEach } from 'mocha';
 import { expect } from 'chai';
-import formObject from 'ember-form-object/form-object-property';
+import formObject from 'ember-form-objects/form-object-property';
 
 describe('formObject', () => {
   let TestClass;
