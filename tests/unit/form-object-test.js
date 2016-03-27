@@ -4,7 +4,7 @@ import DS from 'ember-data';
 import { it } from 'ember-mocha';
 import { describe, beforeEach } from 'mocha';
 import { expect } from 'chai';
-import FormObject from 'ember-form-object/form-object';
+import FormObject from 'ember-form-objects/form-object';
 
 describe('FormObject', () => {
   let formObject;
