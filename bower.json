@@ -1,5 +1,5 @@
 {
-  "name": "ember-form-object",
+  "name": "ember-validated-form-buffer",
   "dependencies": {
     "bootstrap": "~3.3.6",
     "ember": "~2.4.1",

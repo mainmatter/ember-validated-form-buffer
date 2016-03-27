@@ -1,25 +1,24 @@
 import Ember from 'ember';
 import { validator, buildValidations } from 'ember-cp-validations';
-import formObject from 'ember-form-object';
-
-const { keys } = Object;
+import formBufferProperty from 'ember-validated-form-buffer';
 
 const Validations = buildValidations({
   name: validator('presence', true)
 });
 
 export default Ember.Controller.extend({
-  data: formObject('model', Validations, {
-    unsetApiErrors() {
-      if (Ember.A(keys(this.get('changes'))).contains('name')) {
-        return 'time';
-      }
-    }
-  }),
+  data: formBufferProperty('model', Validations),
 
   actions: {
-    submitForm() {
+    submit(e) {
+      e.preventDefault();
+
+      this.get('data').applyBufferedChanges();
       this.get('model').save();
+    },
+
+    reset() {
+      this.get('data').discardBufferedChanges();
     }
   }
 });
