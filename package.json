@@ -1,7 +1,7 @@
 {
   "name": "ember-validated-form-buffer",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.1",
+  "description": "A validated form buffer that wraps Ember Data models for use in forms.",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -11,7 +11,7 @@
     "start": "ember server",
     "test": "ember try:testall"
   },
-  "repository": "",
+  "repository": "https://github.com/simplabs/ember-validated-form-buffer",
   "engines": {
     "node": ">= 0.10.0"
   },
