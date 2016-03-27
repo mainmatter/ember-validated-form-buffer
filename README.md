@@ -21,6 +21,12 @@ the buffering functionality and
 [ember-cp-validations](https://github.com/offirgolan/ember-cp-validations) for
 client side validations.
 
+## Installation
+
+Install `ember-validated-form-buffer` with
+
+`ember install ember-validated-form-buffer`
+
 ## Example
 
 In order to define a validated form buffer on a controller or component, import
