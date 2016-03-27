@@ -2,8 +2,6 @@ import Ember from 'ember';
 import { validator, buildValidations } from 'ember-cp-validations';
 import formBufferProperty from 'ember-validated-form-buffer';
 
-const { keys } = Object;
-
 const Validations = buildValidations({
   name: validator('presence', true)
 });
@@ -21,12 +19,6 @@ export default Ember.Controller.extend({
 
     reset() {
       this.get('data').discardBufferedChanges();
-    },
-
-    updateName(e) {
-      const name = e.currentTarget.value;
-
-      this.set('data.name', name);
     }
   }
 });
