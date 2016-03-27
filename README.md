@@ -2,14 +2,14 @@
 
 # ember-validated-form-buffer
 
-ember-validated-form-buffer implements a __validating buffer that wraps Ember
+`ember-validated-form-buffer` implements a __validating buffer that wraps Ember
 Data models and can be used in forms to buffer user inputs before applying them
 to the underlying model__. The buffer also handles mixing client side
 validation errors and errors returned from the API as well as functionality
 that detects which API errors may have become obsolete due to modifications to
 the respective properties.
 
-ember-validated-form-buffer helps implementing common forms functionality:
+`ember-validated-form-buffer` helps implementing common forms functionality:
 
 * preventing modification of models until the form is submitted
 * implementing cancel/reset functionality
@@ -147,9 +147,9 @@ data: formBufferProperty('model', Validations, {
 
 ## License
 
-ember-validated-form-buffer is developed by and &copy;
+`ember-validated-form-buffer` is developed by and &copy;
 [simplabs GmbH](http://simplabs.com) and contributors. It is released under the
 [MIT License](https://github.com/simplabs/ember-simple-auth/blob/master/LICENSE).
 
-ember-validated-form-buffer is not an official part of
+`ember-validated-form-buffer` is not an official part of
 [Ember.js](http://emberjs.com) and is not maintained by the Ember.js Core Team.
