@@ -2,13 +2,18 @@
 
 # ember-validated-form-buffer
 
-ember-validated-form-buffer implements a form buffer object that wraps Ember
-Data models. __The buffer can be used in forms to buffer user inputs before
-applying them to the underlying model, enabling better user interfaces__. The
-buffer also handles mixing client side validation errors and errors returned
-from the API as well as functionality that decides which API errors became
-obsolete due to changes to the respective properties and should not be
-displayed anymore.
+ember-validated-form-buffer implements a __validating buffer that wraps Ember
+Data models and can be used in forms to buffer user inputs before applying them
+to the underlying model__. The buffer also handles mixing client side
+validation errors and errors returned from the API as well as functionality
+that detects which API errors may have become obsolete due to modifications to
+the respective properties.
+
+ember-validated-form-buffer helps implementing common forms functionality:
+
+* preventing modification of models until the form is submitted
+* implementing cancel/reset functionality
+* filtering irrelevant errors
 
 It leverages
 [ember-buffered-proxy](https://github.com/yapplabs/ember-buffered-proxy) for
@@ -18,10 +23,11 @@ client side validations.
 
 ## Example
 
-In order to define a form buffer on a controller or component, import the
-`formBufferProperty` helper and define a property that wraps the model
-instance. When the form is submitted, apply the buffered changes or discard
-them to reset the buffer to the model's state:
+In order to define a validated form buffer on a controller or component, import
+the `formBufferProperty` helper and define a property that wraps the model
+instance. Pass in the validations mixin as returend by ember-cp-validations.
+When the form is submitted, apply the buffered changes and save the model or
+discard them to reset all user input:
 
 ```js
 import Ember from 'ember';
@@ -50,13 +56,26 @@ export default Ember.Controller.extend({
 });
 ```
 
-Then instead of binding form inputs to the model, bind them to the buffer
-instead:
+Then instead of binding form inputs to model properties directly, bind them to
+the buffer instead:
 
 ```hbs
 <form onsubmit={{action 'submit'}}>
   <label>Name</label>
   {{input value=data.name}}
+  <button type="submit">Save</button>
+  <button type="button" onclick={{action 'reset'}}>Reset</button>
+</form>
+```
+
+If you're not using 2 way data bindings for the input but Data Down/Actions Up,
+make sure to update the buffer property instead of the model's when the
+respective action is called:
+
+```hbs
+<form onsubmit={{action 'submit'}}>
+  <label>Name</label>
+  <input value="{{data.name}}" onkeydown={{action (mut data.name) value='currentTarget.value'}}/>
   <button type="submit">Save</button>
   <button type="button" onclick={{action 'reset'}}>Reset</button>
 </form>
@@ -114,7 +133,7 @@ data: formBufferProperty('model', Validations, {
   unsetApiErrors() {
     let changedKeys = Ember.A(Object.keys(this.get('buffer')));
     if (changedKeys.contains('date') || changedKeys.contains('time')) {
-      return 'datetime'; // whenever the date or time attributes change, also hide errors on the virtual datetime property
+      return 'datetime'; // whenever the "date" or "time" attributes change, also hide errors on the virtual "datetime" property
     }
   }
 })

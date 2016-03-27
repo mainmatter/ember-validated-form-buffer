@@ -21,6 +21,12 @@ export default Ember.Controller.extend({
 
     reset() {
       this.get('data').discardBufferedChanges();
+    },
+
+    updateName(e) {
+      const name = e.currentTarget.value;
+
+      this.set('data.name', name);
     }
   }
 });
