@@ -45,7 +45,7 @@ const Validations = buildValidations({
 });
 
 export default Ember.Controller.extend({
-  data: formBufferProperty('model', Validations}),
+  data: formBufferProperty('model', Validations),
 
   actions: {
     submit(e) {
