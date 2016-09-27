@@ -51,7 +51,7 @@
   "dependencies": {
     "ember-cli-babel": "^5.1.5",
     "ember-buffered-proxy": "0.5.1",
-    "ember-cp-validations": "2.6.1"
+    "ember-cp-validations": "2.9.7"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
