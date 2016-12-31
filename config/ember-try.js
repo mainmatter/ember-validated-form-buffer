@@ -1,53 +1,59 @@
+/*jshint node:true*/
 module.exports = {
   scenarios: [
     {
-      name: 'default',
-      dependencies: { }
-    },
-    {
-      name: 'ember-release',
-      dependencies: {
-        'ember': 'components/ember#release',
-        'ember-data': 'components/ember-data#release'
-      },
-      resolutions: {
-        'ember': 'release',
-        'ember-data': 'beta'
+      name: 'ember-lts-2.4',
+      bower: {
+        dependencies: {
+          'ember': 'components/ember#lts-2-4'
+        },
+        resolutions: {
+          'ember': 'lts-2-4'
+        }
       }
     },
     {
-      name: 'ember-earliest',
-      dependencies: {
-        'ember': 'components/ember#1.12',
-        'ember-data': 'components/ember-data#1.13',
-        'ember-cli-shims': '0.0.6'
-      },
-      resolutions: {
-        'ember': '1.12',
-        'ember-data': '1.13',
-        'ember-cli-shims': '0.0.6'
+      name: 'ember-lts-2.8',
+      bower: {
+        dependencies: {
+          'ember': 'components/ember#lts-2-8'
+        },
+        resolutions: {
+          'ember': 'lts-2-8'
+        }
+      }
+    },
+    {
+      name: 'ember-release',
+      bower: {
+        dependencies: {
+          'ember': 'components/ember#release'
+        },
+        resolutions: {
+          'ember': 'release'
+        }
       }
     },
     {
       name: 'ember-beta',
-      dependencies: {
-        'ember': 'components/ember#beta',
-        'ember-data': 'components/ember-data#beta'
-      },
-      resolutions: {
-        'ember': 'beta',
-        'ember-data': 'beta'
+      bower: {
+        dependencies: {
+          'ember': 'components/ember#beta'
+        },
+        resolutions: {
+          'ember': 'beta'
+        }
       }
     },
     {
       name: 'ember-canary',
-      dependencies: {
-        'ember': 'components/ember#canary',
-        'ember-data': 'components/ember-data#canary'
-      },
-      resolutions: {
-        'ember': 'canary',
-        'ember-data': 'canary'
+      bower: {
+        dependencies: {
+          'ember': 'components/ember#canary'
+        },
+        resolutions: {
+          'ember': 'canary'
+        }
       }
     }
   ]

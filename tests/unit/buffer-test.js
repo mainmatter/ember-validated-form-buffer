@@ -1,16 +1,17 @@
 /* jshint expr:true */
 import Ember from 'ember';
 import DS from 'ember-data';
-import { it } from 'ember-mocha';
-import { describe, beforeEach } from 'mocha';
+import { setupTest } from 'ember-mocha';
+import { it, describe } from 'mocha';
 import { expect } from 'chai';
+
 import Buffer from 'ember-validated-form-buffer/buffer';
 
 describe('Buffer', () => {
   let buffer;
   let content;
 
-  beforeEach(() => {
+  setupTest(() => {
     content = Ember.Object.extend(Ember.Evented, {
       init() {
         this._super();
@@ -72,7 +73,7 @@ describe('Buffer', () => {
     });
 
     describe('when displayErrors is not empty', () => {
-      beforeEach(() => buffer.set('displayErrors', { property: 'error' }));
+      setupTest(() => buffer.set('displayErrors', { property: 'error' }));
 
       it('is true', () => {
         expect(buffer.get('hasDisplayErrors')).to.be.true;
@@ -82,7 +83,7 @@ describe('Buffer', () => {
 
   describe('apiErrors', () => {
     describe('when the content is a DS.Model', () => {
-      beforeEach(() => {
+      setupTest(() => {
         content = DS.Model.extend({
           attr: DS.attr()
         })._create();
@@ -168,13 +169,13 @@ describe('Buffer', () => {
   });
 
   describe('when the content is a DS.Model', () => {
-    beforeEach(() => {
+    setupTest(() => {
       content = DS.Model.extend()._create();
       buffer = Buffer.create({ content });
     });
 
     describe('when the content triggers the "becameInvalid" event', () => {
-      beforeEach(() => {
+      setupTest(() => {
         buffer.get('_apiErrorBlacklist').pushObject('test');
       });
 
@@ -189,7 +190,7 @@ describe('Buffer', () => {
     });
 
     describe('when the content triggers the "didCommit" event', () => {
-      beforeEach(() => {
+      setupTest(() => {
         buffer.get('_apiErrorBlacklist').pushObject('test');
       });
 

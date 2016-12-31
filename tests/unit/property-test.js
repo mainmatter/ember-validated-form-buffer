@@ -1,7 +1,7 @@
 /* jshint expr:true */
 import Ember from 'ember';
-import { it } from 'ember-mocha';
-import { describe, beforeEach } from 'mocha';
+import { setupTest } from 'ember-mocha';
+import { it, describe } from 'mocha';
 import { expect } from 'chai';
 import property from 'ember-validated-form-buffer/property';
 
@@ -11,7 +11,7 @@ describe('property', () => {
   let model;
   let container;
 
-  beforeEach(() => {
+  setupTest(() => {
     container = Ember.Object.create();
     model = Ember.Object.create();
     TestClass = Ember.Object.extend({

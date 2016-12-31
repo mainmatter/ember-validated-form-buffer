@@ -4,11 +4,11 @@ import Buffer from './buffer';
 
 const { keys } = Object;
 
-function creatFormBuffer(model, owner, ...mixins) {
+function createFormBuffer(model, owner, ...mixins) {
   const ownerInjection = owner.ownerInjection();
   const ownerProperties = keys(ownerInjection).reduce((acc, key) => {
     acc[key] = null;
-    return acc
+    return acc;
   }, {});
 
   return Buffer.extend(...mixins, ownerProperties).create(ownerInjection, {
@@ -21,6 +21,6 @@ export default function formBufferProperty(modelProperty, ...mixins) {
     const model = this.get(modelProperty);
     const owner = getOwner(this);
 
-    return creatFormBuffer(model, owner, ...mixins);
+    return createFormBuffer(model, owner, ...mixins);
   });
 }
