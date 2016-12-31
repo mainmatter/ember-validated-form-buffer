@@ -45,6 +45,3 @@ notifications:
     rooms:
       secure: OOKD4ZksqzEBW/A3WRuOToODIxnDITqx+Esu7tdmmYPuQlMYgx4SUHv8j9OM9/ScFJiseeVGSkl45vJrHLLIITX9XSjO1RgiGZgw2heVujmGpF6CZNqvT6GsQuKIvMzmwF7IxuHdfV45Csr9Ou/Fg74TszR/4S2h4SOI4zhLg7A=
     on_success: never
-  # Usually, it's ok to finish the test scenario without reverting
-  #  to the addon's original dependency state, skipping "cleanup".
-  - ember try:one $EMBER_TRY_SCENARIO test --skip-cleanup
