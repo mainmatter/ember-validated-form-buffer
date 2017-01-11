@@ -14,7 +14,7 @@ export default Ember.Controller.extend({
       e.preventDefault();
 
       this.get('data').applyBufferedChanges();
-      this.get('model').save();
+      this.get('model').save().catch(function() {});
     },
 
     reset() {
