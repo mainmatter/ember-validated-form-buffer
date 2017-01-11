@@ -3,7 +3,7 @@ import Ember from 'ember';
 const { keys } = Object;
 const { computed, get } = Ember;
 
-export default Ember.Component.extend({
+const EachInComponent = Ember.Component.extend({
   positionalParams: ['object'],
 
   keyValuePairs: computed('object', function() {
@@ -14,3 +14,9 @@ export default Ember.Component.extend({
     });
   })
 });
+
+EachInComponent.reopenClass({
+  positionalParams: ['object']
+});
+
+export default EachInComponent;
