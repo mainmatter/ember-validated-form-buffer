@@ -4,8 +4,6 @@ const { keys } = Object;
 const { computed, get } = Ember;
 
 const EachInComponent = Ember.Component.extend({
-  positionalParams: ['object'],
-
   keyValuePairs: computed('object', function() {
     let object = this.get('object');
 
