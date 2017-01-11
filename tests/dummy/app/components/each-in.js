@@ -1,9 +1,9 @@
 import Ember from 'ember';
 
 const { keys } = Object;
-const { computed, get } = Ember;
+const { Component, computed, get } = Ember;
 
-const EachInComponent = Ember.Component.extend({
+const EachInComponent = Component.extend({
   keyValuePairs: computed('object', function() {
     let object = this.get('object');
 
