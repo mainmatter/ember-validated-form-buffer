@@ -1,14 +1,14 @@
 import Ember from 'ember';
-import getOwner from 'ember-getowner-polyfill';
 import Buffer from './buffer';
 
 const { keys } = Object;
+const { getOwner, computed } = Ember;
 
-function creatFormBuffer(model, owner, ...mixins) {
-  const ownerInjection = owner.ownerInjection();
-  const ownerProperties = keys(ownerInjection).reduce((acc, key) => {
+function createFormBuffer(model, owner, ...mixins) {
+  let ownerInjection = owner.ownerInjection();
+  let ownerProperties = keys(ownerInjection).reduce((acc, key) => {
     acc[key] = null;
-    return acc
+    return acc;
   }, {});
 
   return Buffer.extend(...mixins, ownerProperties).create(ownerInjection, {
@@ -17,10 +17,10 @@ function creatFormBuffer(model, owner, ...mixins) {
 }
 
 export default function formBufferProperty(modelProperty, ...mixins) {
-  return Ember.computed(modelProperty, function() {
-    const model = this.get(modelProperty);
-    const owner = getOwner(this);
+  return computed(modelProperty, function() {
+    let model = this.get(modelProperty);
+    let owner = getOwner(this);
 
-    return creatFormBuffer(model, owner, ...mixins);
+    return createFormBuffer(model, owner, ...mixins);
   });
 }

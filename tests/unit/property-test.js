@@ -1,27 +1,31 @@
 /* jshint expr:true */
 import Ember from 'ember';
-import { it } from 'ember-mocha';
+import { setupModelTest, it } from 'ember-mocha';
 import { describe, beforeEach } from 'mocha';
 import { expect } from 'chai';
 import property from 'ember-validated-form-buffer/property';
+
+const { getOwner, typeOf, Object: EmberObject } = Ember;
 
 describe('property', () => {
   let TestClass;
   let testInstance;
   let model;
-  let container;
 
-  beforeEach(() => {
-    container = Ember.Object.create();
-    model = Ember.Object.create();
-    TestClass = Ember.Object.extend({
-      data: property('model')
-    });
-    testInstance = TestClass.create({ model, container });
+  setupModelTest('user');
+
+  beforeEach(function() {
+    model = this.subject();
+    let owner = getOwner(model);
+    TestClass = EmberObject.extend(
+      owner.ownerInjection(),
+      { data: property('model') }
+    );
+    testInstance = TestClass.create({ model });
   });
 
   it('defines a computed property', () => {
-    TestClass = Ember.Object.extend({
+    TestClass = EmberObject.extend({
       data: property('model')
     });
 
@@ -34,24 +38,24 @@ describe('property', () => {
     expect(testInstance.get('data.content')).to.eql(model);
   });
 
-  it("sets the container as the buffer's container", () => {
-    expect(testInstance.get('data.container')).to.eql(container);
-  });
-
   it('mixes in all specified mixins', () => {
-    TestClass = Ember.Object.extend({
-      data: property('model', {
-        methodA() {}
-      }, {
-        methodB() {}
-      }, {
-        methodC() {}
-      })
-    });
-    testInstance = TestClass.create({ model, container });
+    let owner = getOwner(model);
+    TestClass = EmberObject.extend(
+      owner.ownerInjection(),
+      {
+        data: property('model', {
+          methodA() {}
+        }, {
+          methodB() {}
+        }, {
+          methodC() {}
+        })
+      }
+    );
+    testInstance = TestClass.create({ model });
 
-    expect(Ember.typeOf(testInstance.get('data').methodA)).to.eq('function');
-    expect(Ember.typeOf(testInstance.get('data').methodB)).to.eq('function');
-    expect(Ember.typeOf(testInstance.get('data').methodC)).to.eq('function');
+    expect(typeOf(testInstance.get('data').methodA)).to.eq('function');
+    expect(typeOf(testInstance.get('data').methodB)).to.eq('function');
+    expect(typeOf(testInstance.get('data').methodC)).to.eq('function');
   });
 });

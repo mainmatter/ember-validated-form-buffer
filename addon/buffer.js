@@ -2,25 +2,35 @@ import Ember from 'ember';
 import DS from 'ember-data';
 import BufferedProxy from 'ember-buffered-proxy/proxy';
 
-const { computed, isEmpty, isNone, makeArray, isPresent } = Ember;
 const { keys } = Object;
+const {
+  computed,
+  isEmpty,
+  isNone,
+  makeArray,
+  isPresent,
+  Evented,
+  A,
+  Object: EmberObject
+} = Ember;
+const { Model } = DS;
 
-export default BufferedProxy.extend(Ember.Evented, {
+export default BufferedProxy.extend(Evented, {
   unsetApiErrors() {},
 
   init() {
     this._super(...arguments);
 
-    const content = this.get('content');
-    if (content instanceof DS.Model) {
+    let content = this.get('content');
+    if (content instanceof Model) {
       content.on('didCommit', () => this._clearApiErrorBlacklist());
       content.on('becameInvalid', () => this._clearApiErrorBlacklist());
     }
   },
 
-  apiErrors: computed('content.errors', function() {
-    const content = this.get('content');
-    if (content instanceof DS.Model) {
+  apiErrors: computed('content.errors.[]', function() {
+    let content = this.get('content');
+    if (content instanceof Model) {
       return content.get('errors');
     } else {
       return [];
@@ -28,12 +38,12 @@ export default BufferedProxy.extend(Ember.Evented, {
   }),
 
   clientErrors: computed('validations.errors.[]', function() {
-    const validationErrors = this.get('validations.errors');
-    const errorAttributes = Ember.A(validationErrors).mapBy('attribute');
-    let clientErrors = Ember.Object.create();
+    let validationErrors = this.get('validations.errors');
+    let errorAttributes = A(validationErrors).mapBy('attribute');
+    let clientErrors = EmberObject.create();
     errorAttributes.forEach((key) => {
-      const errors = makeArray(this.get(`validations.attrs.${key}.errors`));
-      const messages = Ember.A(errors).mapBy('message');
+      let errors = makeArray(this.get(`validations.attrs.${key}.errors`));
+      let messages = A(errors).mapBy('message');
       if (isPresent(messages)) {
         clientErrors.set(key, messages);
       }
@@ -42,20 +52,20 @@ export default BufferedProxy.extend(Ember.Evented, {
   }),
 
   displayErrors: computed('clientErrors.[]', 'apiErrors.[]', '_apiErrorBlacklist.[]', function() {
-    const { apiErrors, _apiErrorBlacklist: apiErrorBlacklist, clientErrors } = this.getProperties(
+    let { apiErrors, _apiErrorBlacklist: apiErrorBlacklist, clientErrors } = this.getProperties(
       'apiErrors', '_apiErrorBlacklist', 'clientErrors'
     );
-    const displayErrors = Ember.Object.create();
+    let displayErrors = EmberObject.create();
     keys(clientErrors).forEach((key) => {
-      const value = clientErrors.get(key);
-      displayErrors.set(key, value);
+      let value = clientErrors.get(key);
+      displayErrors.set(key, A(value));
     });
     apiErrors.forEach((apiError) => {
-      if (!apiErrorBlacklist.contains(apiError.attribute)) {
+      if (!apiErrorBlacklist.includes(apiError.attribute)) {
         if (isNone(displayErrors.get(apiError.attribute))) {
-          displayErrors.set(apiError.attribute, Ember.A());
+          displayErrors.set(apiError.attribute, A());
         }
-        displayErrors.get(apiError.attribute).push(apiError.message);
+        displayErrors.get(apiError.attribute).pushObject(apiError.message);
       }
     });
     return displayErrors;
@@ -71,12 +81,12 @@ export default BufferedProxy.extend(Ember.Evented, {
     if (this.get(key) !== this.get(`content.${key}`)) {
       this.get('_apiErrorBlacklist').pushObject(key);
     }
-    const unsetApiErrors = makeArray(this.unsetApiErrors.apply(this));
+    let unsetApiErrors = makeArray(this.unsetApiErrors.apply(this));
     this.get('_apiErrorBlacklist').pushObjects(unsetApiErrors);
   },
 
   _apiErrorBlacklist: computed(function() {
-    return Ember.A();
+    return A();
   }),
 
   _clearApiErrorBlacklist() {

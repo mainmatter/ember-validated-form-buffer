@@ -1,10 +1,10 @@
 <form onsubmit={{action 'submit'}} class="form-inline">
-  <div class="form-group {{if data.hasDisplayErrors 'has-error'}}">
+  <div class="form-group {{if data.hasDisplayErrors 'has-error'}}" data-test-input>
     <label class="control-label" for="name">Name</label>
     {{input value=data.name class='form-control' id='name' placeholder='Enter Name'}}
   </div>
-  <button type="submit" class="btn btn-default">Save</button>
-  <button type="button" class="btn" onclick={{action 'reset'}}>Reset</button>
+  <button type="submit" class="btn btn-default" data-test-submit>Save</button>
+  <button type="button" class="btn" onclick={{action 'reset'}} data-test-reset>Reset</button>
 </form>
 
 {{#if data.hasDisplayErrors}}
@@ -12,12 +12,14 @@
     <h3>Validation Errors</h3>
     <ul>
       {{#each-in data.displayErrors as |attribute errors|}}
-        <strong>{{attribute}}</strong>
-        <ul>
-          {{#each errors as |error|}}
-            <li>{{error}}</li>
-          {{/each}}
-        </ul>
+        <li>
+          <strong>{{attribute}}</strong>
+          <ul>
+            {{#each errors as |error|}}
+              <li data-test-error>{{error}}</li>
+            {{/each}}
+          </ul>
+        </li>
       {{/each-in}}
     </ul>
   </div>
