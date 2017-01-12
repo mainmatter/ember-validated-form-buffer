@@ -5,7 +5,7 @@ import { describe, beforeEach } from 'mocha';
 import { expect } from 'chai';
 import property from 'ember-validated-form-buffer/property';
 
-const { getOwner } = Ember;
+const { getOwner, typeOf, Object: EmberObject } = Ember;
 
 describe('property', () => {
   let TestClass;
@@ -17,7 +17,7 @@ describe('property', () => {
   beforeEach(function() {
     model = this.subject();
     let owner = getOwner(model);
-    TestClass = Ember.Object.extend(
+    TestClass = EmberObject.extend(
       owner.ownerInjection(),
       { data: property('model') }
     );
@@ -25,7 +25,7 @@ describe('property', () => {
   });
 
   it('defines a computed property', () => {
-    TestClass = Ember.Object.extend({
+    TestClass = EmberObject.extend({
       data: property('model')
     });
 
@@ -40,7 +40,7 @@ describe('property', () => {
 
   it('mixes in all specified mixins', () => {
     let owner = getOwner(model);
-    TestClass = Ember.Object.extend(
+    TestClass = EmberObject.extend(
       owner.ownerInjection(),
       {
         data: property('model', {
@@ -54,8 +54,8 @@ describe('property', () => {
     );
     testInstance = TestClass.create({ model });
 
-    expect(Ember.typeOf(testInstance.get('data').methodA)).to.eq('function');
-    expect(Ember.typeOf(testInstance.get('data').methodB)).to.eq('function');
-    expect(Ember.typeOf(testInstance.get('data').methodC)).to.eq('function');
+    expect(typeOf(testInstance.get('data').methodA)).to.eq('function');
+    expect(typeOf(testInstance.get('data').methodB)).to.eq('function');
+    expect(typeOf(testInstance.get('data').methodC)).to.eq('function');
   });
 });
