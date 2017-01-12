@@ -4,7 +4,7 @@ import Buffer from './buffer';
 const { keys } = Object;
 const { getOwner, computed } = Ember;
 
-function creatFormBuffer(model, owner, ...mixins) {
+function createFormBuffer(model, owner, ...mixins) {
   let ownerInjection = owner.ownerInjection();
   let ownerProperties = keys(ownerInjection).reduce((acc, key) => {
     acc[key] = null;
@@ -21,6 +21,6 @@ export default function formBufferProperty(modelProperty, ...mixins) {
     let model = this.get(modelProperty);
     let owner = getOwner(this);
 
-    return creatFormBuffer(model, owner, ...mixins);
+    return createFormBuffer(model, owner, ...mixins);
   });
 }
