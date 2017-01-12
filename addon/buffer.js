@@ -18,7 +18,7 @@ export default BufferedProxy.extend(Ember.Evented, {
     }
   },
 
-  apiErrors: computed('content.errors', function() {
+  apiErrors: computed('content.errors.[]', function() {
     const content = this.get('content');
     if (content instanceof DS.Model) {
       return content.get('errors');
@@ -48,14 +48,14 @@ export default BufferedProxy.extend(Ember.Evented, {
     const displayErrors = Ember.Object.create();
     keys(clientErrors).forEach((key) => {
       const value = clientErrors.get(key);
-      displayErrors.set(key, value);
+      displayErrors.set(key, Ember.A(value));
     });
     apiErrors.forEach((apiError) => {
-      if (!apiErrorBlacklist.contains(apiError.attribute)) {
+      if (!apiErrorBlacklist.includes(apiError.attribute)) {
         if (isNone(displayErrors.get(apiError.attribute))) {
           displayErrors.set(apiError.attribute, Ember.A());
         }
-        displayErrors.get(apiError.attribute).push(apiError.message);
+        displayErrors.get(apiError.attribute).pushObject(apiError.message);
       }
     });
     return displayErrors;

@@ -138,7 +138,7 @@ const Validations = buildValidations({
 data: formBufferProperty('model', Validations, {
   unsetApiErrors() {
     let changedKeys = Ember.A(Object.keys(this.get('buffer')));
-    if (changedKeys.contains('date') || changedKeys.contains('time')) {
+    if (changedKeys.includes('date') || changedKeys.includes('time')) {
       return 'datetime'; // whenever the "date" or "time" attributes change, also hide errors on the virtual "datetime" property
     }
   }
