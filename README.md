@@ -116,9 +116,32 @@ and
 [ember-cp-validations](https://github.com/offirgolan/ember-cp-validations)
 respectively.
 
+The buffer can be imported and used directly:
+
+```js
+import { Buffer } from 'ember-validated-form-buffer';
+
+const Validations = buildValidations({
+  name: validator('presence', true)
+});
+
+export default Ember.Controller.extend({
+  data: computed('model', function() {
+    let owner = Ember.getOwner(this);
+    return Buffer.extend(Validations).create(owner.ownerInjection(), {
+      content: this.get('model')
+    });
+  }),
+
+…
+```
+
+It is generally easier to use the `formBufferProperty` macro to define a form
+buffer property though:
+
 ### The `formBufferProperty` helper
 
-The `formBufferProperty` helper takes the name of another property that returns
+The `formBufferProperty` macro takes the name of another property that returns
 the Ember Data model to wrap in the buffer as well as a list of mixins that
 will be applied to the buffer. These mixins usually include the validation
 mixin as created by ember-cp-validations's `buildValidations` method.
@@ -131,18 +154,23 @@ API again. That way it's possible to hide API errors on a property when a
 related property changes:
 
 ```js
+import formBufferProperty from 'ember-validated-form-buffer';
+
 const Validations = buildValidations({
   name: validator('presence', true)
 });
 
-data: formBufferProperty('model', Validations, {
-  unsetApiErrors() {
-    let changedKeys = Ember.A(Object.keys(this.get('buffer')));
-    if (changedKeys.includes('date') || changedKeys.includes('time')) {
-      return 'datetime'; // whenever the "date" or "time" attributes change, also hide errors on the virtual "datetime" property
+export default Ember.Controller.extend({
+  data: formBufferProperty('model', Validations, {
+    unsetApiErrors() {
+      let changedKeys = Ember.A(Object.keys(this.get('buffer')));
+      if (changedKeys.includes('date') || changedKeys.includes('time')) {
+        return 'datetime'; // whenever the "date" or "time" attributes change, also hide errors on the virtual "datetime" property
+      }
     }
-  }
-})
+  })
+
+…
 ```
 
 ## License
