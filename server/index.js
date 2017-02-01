@@ -1,8 +1,12 @@
+'use strict';
+
+/* eslint-env node */
+
 module.exports = function(app) {
-  var globSync   = require('glob').sync;
-  var bodyParser = require('body-parser');
-  var mocks      = globSync('./mocks/**/*.js', { cwd: __dirname }).map(require);
-  var proxies    = globSync('./proxies/**/*.js', { cwd: __dirname }).map(require);
+  let globSync = require('glob').sync;
+  let bodyParser = require('body-parser');
+  let mocks = globSync('./mocks/**/*.js', { cwd: __dirname }).map(require);
+  let proxies = globSync('./proxies/**/*.js', { cwd: __dirname }).map(require);
 
   app.use(bodyParser.json({ type: 'application/*+json' }));
   app.use(bodyParser.urlencoded({
@@ -10,7 +14,7 @@ module.exports = function(app) {
   }));
 
   // Log proxy requests
-  var morgan  = require('morgan');
+  let morgan = require('morgan');
   app.use(morgan('dev'));
 
   mocks.forEach(function(route) { route(app); });
