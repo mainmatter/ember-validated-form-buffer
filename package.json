@@ -15,7 +15,8 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember try:each"
+    "test": "ember try:each",
+    "lint": "eslint app addon blueprints config server test-support tests *.js"
   },
   "dependencies": {
     "ember-cli-babel": "^5.1.7",
@@ -47,7 +48,7 @@
     "ember-load-initializers": "^0.6.3",
     "ember-resolver": "^2.0.3",
     "ember-test-selectors": "0.2.1",
-    "eslint-plugin-ember-suave": "^1.0.0",
+    "eslint-config-simplabs": "0.2.2",
     "loader.js": "^4.0.10"
   },
   "engines": {
