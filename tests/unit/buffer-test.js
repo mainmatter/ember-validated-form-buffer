@@ -1,17 +1,17 @@
 /* jshint expr:true */
 import Ember from 'ember';
-import DS from 'ember-data';
-import { it } from 'ember-mocha';
+import { it, setupModelTest } from 'ember-mocha';
 import { describe, beforeEach } from 'mocha';
 import { expect } from 'chai';
 import Buffer from 'ember-validated-form-buffer/buffer';
 
 const { Object: EmberObject, Evented, A, makeArray, run } = Ember;
-const { Model, attr } = DS;
 
 describe('Buffer', () => {
   let buffer;
   let content;
+
+  setupModelTest('user');
 
   beforeEach(() => {
     content = EmberObject.extend(Evented, {
@@ -85,10 +85,8 @@ describe('Buffer', () => {
 
   describe('apiErrors', () => {
     describe('when the content is a DS.Model', () => {
-      beforeEach(() => {
-        content = Model.extend({
-          attr: attr()
-        })._create();
+      beforeEach(function() {
+        content = this.subject();
         buffer = Buffer.create({ content });
       });
 
@@ -171,8 +169,8 @@ describe('Buffer', () => {
   });
 
   describe('when the content is a DS.Model', () => {
-    beforeEach(() => {
-      content = Model.extend()._create();
+    beforeEach(function() {
+      content = this.subject();
       buffer = Buffer.create({ content });
     });
 
