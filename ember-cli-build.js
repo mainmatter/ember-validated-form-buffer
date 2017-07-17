@@ -6,7 +6,11 @@ let EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 module.exports = function(defaults) {
   let app = new EmberAddon(defaults, {
-    // Add options here
+    'ember-bootstrap': {
+      'bootstrapVersion': 3,
+      'importBootstrapFont': true,
+      'importBootstrapCSS': true
+    }
   });
 
   /*
@@ -15,8 +19,6 @@ module.exports = function(defaults) {
     This build file does *not* influence how the addon or the app using it
     behave. You most likely want to be modifying `./index.js` or app's build file
   */
-
-  app.import('bower_components/bootstrap/dist/css/bootstrap.css');
 
   return app.toTree();
 };
