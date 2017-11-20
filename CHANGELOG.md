@@ -1,3 +1,7 @@
+# 0.2.0
+
+* ember-validated-form-buffer now uses Babel 6, see #76
+
 # 0.1.0
 
 * The form `Buffer` class is now exposed by the framework as well so that it
