@@ -1,3 +1,8 @@
+# 0.2.1
+
+* ember-validated-form-buffer now works with ember-buffered-proxy 0.8.0, see
+  #89.
+
 # 0.2.0
 
 * ember-validated-form-buffer now uses Babel 6, see #76
