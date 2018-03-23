@@ -19,7 +19,7 @@
     "lint": "eslint app addon blueprints config server test-support tests *.js"
   },
   "dependencies": {
-    "ember-buffered-proxy": "^0.7.0 || ^0.8.0",
+    "ember-buffered-proxy": "^1.0.0-beta.0",
     "ember-cli-babel": "^6.11.0",
     "ember-cp-validations": "^3.1.4",
     "ember-getowner-polyfill": "^1.1.0 || ^2.0.0"
