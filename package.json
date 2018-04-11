@@ -49,9 +49,9 @@
     "ember-addon"
   ],
   "dependencies": {
-    "ember-buffered-proxy": "0.6.0",
+    "ember-buffered-proxy": "^0.6.0",
     "ember-cli-babel": "^5.2.1",
-    "ember-cp-validations": "3.1.4"
+    "ember-cp-validations": "^3.1.4"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
