@@ -1,6 +1,6 @@
 {
   "name": "ember-validated-form-buffer",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A validated form buffer that wraps Ember Data models for use in forms.",
   "keywords": [
     "ember-addon"
