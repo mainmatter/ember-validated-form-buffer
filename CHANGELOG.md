@@ -1,3 +1,8 @@
+# 0.2.2
+
+* ember-validated-form-buffer now works with ember-buffered-proxy 1.0.0, see
+  #109.
+
 # 0.2.1
 
 * ember-validated-form-buffer now works with ember-buffered-proxy 0.8.0, see
