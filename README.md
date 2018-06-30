@@ -31,7 +31,7 @@ Install `ember-validated-form-buffer` with
 
 In order to define a validated form buffer on a controller or component, import
 the `formBufferProperty` helper and define a property that wraps the model
-instance. Pass in the validations mixin as returend by ember-cp-validations.
+instance. Pass in the validations mixin as returned by ember-cp-validations.
 When the form is submitted, apply the buffered changes and save the model or
 discard them to reset all user input:
 
