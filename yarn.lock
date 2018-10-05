@@ -2319,11 +2319,12 @@ ember-bootstrap@1.2.1:
     rsvp "^4.0.1"
     silent-error "^1.0.1"
 
-"ember-buffered-proxy@^0.7.0 || ^0.8.0":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/ember-buffered-proxy/-/ember-buffered-proxy-0.8.1.tgz#d89c22c9db76f411bf92c7b3704ae8c70887cbfa"
+"ember-buffered-proxy@^0.7.0 || ^0.8.0 || ^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ember-buffered-proxy/-/ember-buffered-proxy-1.0.0.tgz#e8ce2f32231036f2391648dd273d5b7242e68a5a"
   dependencies:
     ember-cli-babel "^6.6.0"
+    ember-notify-property-change-polyfill "^0.0.1"
 
 ember-cli-babel@6.12.0, ember-cli-babel@^6.0.0, ember-cli-babel@^6.0.0-beta.4, ember-cli-babel@^6.0.0-beta.7, ember-cli-babel@^6.10.0, ember-cli-babel@^6.11.0, ember-cli-babel@^6.3.0, ember-cli-babel@^6.6.0, ember-cli-babel@^6.8.1, ember-cli-babel@^6.8.2, ember-cli-babel@^6.9.0, ember-cli-babel@^6.9.2:
   version "6.12.0"
@@ -2840,6 +2841,13 @@ ember-mocha@^0.12.0:
   dependencies:
     ember-test-helpers "^0.6.3"
 
+ember-notify-property-change-polyfill@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/ember-notify-property-change-polyfill/-/ember-notify-property-change-polyfill-0.0.1.tgz#636f75e2aaf67e2c56cb13e7139499226fd60d55"
+  dependencies:
+    ember-cli-babel "^6.6.0"
+    ember-cli-version-checker "^2.1.0"
+
 ember-popper@^0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/ember-popper/-/ember-popper-0.8.3.tgz#547ec0e8d810805bd65bce7556f0a3377cb9730c"
@@ -2917,24 +2925,24 @@ ember-source-channel-url@^1.0.1:
   dependencies:
     got "^8.0.1"
 
-ember-source@~2.18.0:
-  version "2.18.2"
-  resolved "https://registry.yarnpkg.com/ember-source/-/ember-source-2.18.2.tgz#75d00eef5488bfe504044b025c752ba924eaf87f"
+ember-source@~3.4.5:
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/ember-source/-/ember-source-3.4.5.tgz#f4a5975affd393c29a69afaa58c2ca9de8bba6c0"
   dependencies:
     broccoli-funnel "^2.0.1"
     broccoli-merge-trees "^2.0.0"
+    chalk "^2.3.0"
     ember-cli-get-component-path-option "^1.0.0"
     ember-cli-is-package-missing "^1.0.0"
     ember-cli-normalize-entity-name "^1.0.0"
     ember-cli-path-utils "^1.0.0"
     ember-cli-string-utils "^1.1.0"
-    ember-cli-test-info "^1.0.0"
     ember-cli-valid-component-name "^1.0.0"
     ember-cli-version-checker "^2.1.0"
     ember-router-generator "^1.2.3"
     inflection "^1.12.0"
-    jquery "^3.2.1"
-    resolve "^1.3.3"
+    jquery "^3.3.1"
+    resolve "^1.6.0"
 
 ember-string-ishtmlsafe-polyfill@^2.0.0:
   version "2.0.1"
@@ -4467,7 +4475,7 @@ jade@0.26.3:
     commander "0.6.1"
     mkdirp "0.3.0"
 
-jquery@^3.2.1:
+jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
@@ -6093,6 +6101,12 @@ resolve-url@^0.2.1:
 resolve@^1.1.2, resolve@^1.1.6, resolve@^1.1.7, resolve@^1.2.0, resolve@^1.3.0, resolve@^1.3.3, resolve@^1.4.0, resolve@^1.5.0:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.7.1.tgz#aadd656374fd298aee895bc026b8297418677fd3"
+  dependencies:
+    path-parse "^1.0.5"
+
+resolve@^1.6.0:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.8.1.tgz#82f1ec19a423ac1fbd080b0bab06ba36e84a7a26"
   dependencies:
     path-parse "^1.0.5"
 
